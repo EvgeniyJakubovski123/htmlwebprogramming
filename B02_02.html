@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>B02_02</title>
+</head>
+<body>
+<h1>Write text</h1>
+<input type="text" id = "InputText">
+<button id ="Save">Save</button>
+<h2>Save text</h2>
+<p id = "Output"></p>
+<script>
+    const input = document.getElementById("InputText");
+    const output = document.getElementById("Output");
+    const save = document.getElementById("Save");
+
+    save.addEventListener("click", function (e) {
+        const message = input.value;
+        sessionStorage.setItem("message", message);
+        output.textContent = message;
+        input.value = "";
+    });
+    window.onload = function () {
+        const saved = sessionStorage.getItem("message");
+        if (saved) {
+            output.textContent = saved;
+            document.getElementById("InputText").value = saved;
+
+        }
+    }
+</script>
+
+
+
+
+
+</body>
+</html>
