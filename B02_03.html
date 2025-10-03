@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактор речень</title>
+</head>
+<body>
+
+<h2>Редактор тексту</h2>
+
+<div id="text-container">
+    <p><span>Перше речення.</span> <span>Друге речення.</span></p>
+    <p><span>Ще одне речення</span></p>
+</div>
+
+
+<button onclick="addParagraph()">Додати параграф</button>
+<button onclick="clearSelection()">Зняти виділення</button>
+<button onclick="editSentence()">Змінити виділене речення</button>
+<button onclick="addBefore()">Додати речення перед виділеним</button>
+<button onclick="deleteSentence()">Видалити виділене речення</button>
+<button onclick="deleteParagraph()">Видалити параграф</button>
+
+<script>
+    let selectedSpan = null;
+    document.getElementById('text-container').addEventListener('click', function(e) {
+        if (e.target.tagName === 'SPAN') {
+            if (selectedSpan) {
+                selectedSpan.style.background = '';
+            }
+            selectedSpan = e.target;
+            selectedSpan.style.background = 'red';
+        }
+    });
+    function addParagraph() {
+        const text = prompt("Введіть текст нового параграфа:");
+        if (text) {
+            const p = document.createElement('p');
+            const span = document.createElement('span');
+            span.textContent = text;
+            p.appendChild(span);
+            document.getElementById('text-container').appendChild(p);
+        }
+    }
+    function clearSelection() {
+        if (selectedSpan) {
+            selectedSpan.style.background = '';
+            selectedSpan = null;
+        }
+    }
+    function editSentence() {
+        if (!selectedSpan) {
+            alert("Виділіть речення!");
+            return;
+        }
+        const newText = prompt("Введіть новий текст:", selectedSpan.textContent);
+        if (newText !== null) {
+            selectedSpan.textContent = newText;
+        }
+    }
+    function addBefore() {
+        const newText = prompt("Введіть текст нового речення:");
+        if (!newText) return;
+
+        const span = document.createElement('span');
+        span.textContent = newText + " ";
+
+        if (selectedSpan) {
+            selectedSpan.parentNode.insertBefore(span, selectedSpan);
+        } else {
+            const paragraphs = document.getElementById('text-container').getElementsByTagName('p');
+            if (paragraphs.length > 0) {
+                paragraphs[paragraphs.length-1].appendChild(span);
+            } else {
+                const p = document.createElement('p');
+                p.appendChild(span);
+                document.getElementById('text-container').appendChild(p);
+            }
+        }
+    }
+
+    function deleteSentence() {
+        if (!selectedSpan) {
+            alert("Виділіть речення!");
+            return;
+        }
+        const parentP = selectedSpan.parentNode;
+        parentP.removeChild(selectedSpan);
+        selectedSpan = null;
+        if (parentP.children.length === 0) {
+            parentP.parentNode.removeChild(parentP);
+        }
+    }
+
+    function deleteParagraph() {
+        const paragraphs = document.getElementById('text-container').getElementsByTagName('p');
+        let index = prompt("Введіть номер параграфа для видалення (починаючи з 1):");
+        index = parseInt(index);
+        if (!isNaN(index) && index >= 1 && index <= paragraphs.length) {
+            const p = paragraphs[index-1];
+            if (selectedSpan && selectedSpan.parentNode === p) {
+                selectedSpan = null;
+            }
+            p.parentNode.removeChild(p);
+        } else {
+            alert("Невірний номер параграфа!");
+        }
+    }
+</script>
+
+</body>
+</html>
