@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>B03_02</title>
+    <style>
+        div{color : red;front-size: 100px;}
+    </style>
+</head>
+<body>
+<div id="output"></div>
+
+<script>
+    function delay(ms) {
+        return new Promise(function(resolve) {
+            setTimeout(resolve, ms);
+        });
+    }
+
+    async function getPost(id) {
+        await delay(1000); // чекаємо 1 секунду
+        let response = await fetch("https://jsonplaceholder.typicode.com/posts/" + id);
+        let data = await response.json();
+        return data;
+    }
+
+    async function main() {
+        let output = document.getElementById("output");
+
+        let post1 = await getPost(1);
+        output.innerHTML += `<p>${post1.id}: ${post1.title}</p>`;
+
+
+        let post2 = await getPost(2);
+        output.innerHTML += `<p>${post2.id}: ${post2.title}</p>`;
+
+
+        let post3 = await getPost(3);
+        output.innerHTML += `<p>${post3.id}: ${post3.title}</p>`;
+
+    }
+
+    main();
+</script>
+</body>
+</html>
